@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>hello</title>
+    </head>
+    <body>
+        <h1>hello</h1>
+        {% if request.method == 'POST' %}
+            this is a POST request with the following data:
+            this thing is {{ the_thing }},
+            and this other thing is {{ json_data.other_thing }}
+        {% else %}
+            this is a GET request, so suck a dick
+        {% endif %}
+    </body>
+</html>

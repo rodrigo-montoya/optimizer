@@ -1,13 +1,34 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
+from optimizer.model import get_params, get_constants, optimizer
 
 app = Flask(__name__)
 
 @app.route('/', methods=['GET', 'POST'])
 def controller():
     if request.method == 'POST':
-        the_thing=request.form.get('the_thing')
         json_data=request.get_json()
-        return render_template('index.html', the_thing=the_thing, json_data=json_data)
+        blocks = []
+        unique_families = []
+        for item in json_data['bloques']:
+            block = {
+                'id': item['id'],
+                'familia': item['familia_botanica'],
+                'dia_plantacion': item['dia_plantacion'],
+                'tiempo_crecimiento': item['tiempo_crecimiento'],
+                'camas_requeridas': item['camas_requeridas'],
+                'precio': item['precio'],
+            }
+            blocks.append(block)
+            if item['familia_botanica'] not in unique_families:
+                unique_families.append(item['familia_botanica'])
+        sectores = json_data['sectores']
+
+        output_path = optimizer(sectores, blocks, unique_families)
+        # output_path = '/app/outputs/output.json'
+        file = open(output_path, 'r')
+        content = file.read()
+        return jsonify(content)
+
     elif request.method == 'GET':
         data = {}
         data["key1"] = "value1"

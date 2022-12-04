@@ -1,3 +1,6 @@
 .pyenv
 gurobi.lic
 matrix1.py
+app/outputs
+app/__pycache__
+app/optimizer/__pycache__

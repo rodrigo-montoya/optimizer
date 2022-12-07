@@ -24,10 +24,13 @@ def controller():
         sectores = json_data['sectores']
 
         output_path = optimizer(sectores, blocks, unique_families)
-        # output_path = '/app/outputs/output.json'
-        file = open(output_path, 'r')
-        content = file.read()
-        return jsonify(content)
+        if output_path:
+            # output_path = '/app/outputs/output.json'
+            file = open(output_path, 'r')
+            content = file.read()
+            return jsonify(content)
+        else:
+            return jsonify("[]")
 
     elif request.method == 'GET':
         data = {}

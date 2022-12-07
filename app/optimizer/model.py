@@ -1,5 +1,6 @@
 import mip
 import os
+from datetime import date
 from itertools import product
 from .funcs import *
 
@@ -22,7 +23,13 @@ def get_params(sectores, blocks, unique_families):
         b_precios.append(item['precio'])
 
     # transforming days to weeks for the model
-    b_semanas = [date_to_week(fecha, custom_start='2022-09-01') for fecha in b_fechas]
+    the_custom_start = ''
+    the_month = date.today().month
+    if the_month < 9:
+        the_custom_start = f'{date.today().year}-09-01'
+    else:
+        the_custom_start = f'{date.today().year + 1}-09-01'
+    b_semanas = [date_to_week(fecha, custom_start=the_custom_start) for fecha in b_fechas]
     b_tiempos = [num_to_week(tiempo) for tiempo in b_tiempos]
 
     # getting all the sector attributes
@@ -66,6 +73,8 @@ def get_constants(params):
     return constants
 
 def optimizer(sectores, blocks, unique_families):
+    if not sectores or not blocks:
+        return None
     params = get_params(sectores, blocks, unique_families)
     constants = get_constants(params)
 
